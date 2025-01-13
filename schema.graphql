@@ -1,0 +1,144 @@
+type NameChanged @entity(immutable: true) {
+  id: Bytes!
+  node: Bytes! # bytes32
+  name: String! # string
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+  address: Bytes!
+}
+
+type Domain @entity {
+  "The namehash of the name"
+  id: ID!
+  "The human readable name, if known. Unknown portions replaced with hash in square brackets (eg, foo.[1234].eth)"
+  name: String
+   "The human readable label name (imported from CSV), if known"
+  labelName: String
+  "keccak256(labelName)"
+  labelhash: Bytes  
+  "The namehash (id) of the parent name"
+  parent: Domain
+  "Can count domains from length of array"
+  subdomains: [Domain!]! @derivedFrom(field: "parent")
+  "The number of subdomains"
+  subdomainCount: Int!
+  "Address logged from current resolver, if any"
+  resolvedAddress: Account
+  
+  "The resolver that controls the domain's settings"
+  resolver: Resolver
+  "The time-to-live (TTL) value of the domain's records"
+  ttl: BigInt
+
+  "The time when the domain was created"
+  createdAt: BigInt!
+  
+  "The account that owns the domain"
+  owner: Account!
+  
+  "The expiry date for the domain, from either the registration, or the wrapped domain if PCC is burned"
+  expiryDate: BigInt
+}
+
+type Account @entity {
+  "The unique identifier for the account"
+  id: ID!
+  "The domains owned by the account"
+  domains: [Domain!]! @derivedFrom(field: "owner")
+}
+
+type Resolver @entity {
+  "The unique identifier for this resolver, which is a concatenation of the resolver address and the domain namehash"
+  id: ID!
+  "The domain that this resolver is associated with"
+  domain: Domain
+  "The address of the resolver contract"
+  address: Bytes!
+  "The current value of the 'addr' record for this resolver, as determined by the associated events"
+  addr: Account
+  "The content hash for this resolver, in binary format"
+  contentHash: Bytes
+  "The set of observed text record keys for this resolver"
+  texts: [String!]
+  "The set of observed SLIP-44 coin types for this resolver"
+  coinTypes: [BigInt!]
+  "The events associated with this resolver"
+  events: [ResolverEvent!]! @derivedFrom(field: "resolver")
+}
+
+interface ResolverEvent {
+  "Concatenation of block number and log ID"
+  id: ID!
+  "Used to derive relationships to Resolvers"
+  resolver: Resolver!
+  "The block number that the event occurred on"
+  blockNumber: Int!
+  "The transaction hash of the event"
+  transactionID: Bytes!
+}
+
+interface DomainEvent {
+  "The unique identifier of the event"
+  id: ID!
+  "The domain name associated with the event"
+  domain: Domain!
+  "The block number at which the event occurred"
+  blockNumber: Int!
+  "The transaction hash of the transaction that triggered the event"
+  transactionID: Bytes!
+}
+
+type NewResolver implements DomainEvent @entity {
+  "The unique identifier of the event"
+  id: ID!
+  "The domain name associated with the event"
+  domain: Domain!
+  "The block number at which the event occurred"
+  blockNumber: Int!
+  "The transaction hash of the transaction that triggered the event"
+  transactionID: Bytes!
+  "The new resolver contract address associated with the domain"
+  resolver: Resolver!
+}
+
+type Transfer implements DomainEvent @entity {
+  "The unique identifier of the event"
+  id: ID!
+  "The domain name associated with the event"
+  domain: Domain!
+  "The block number at which the event occurred"
+  blockNumber: Int!
+  "The transaction hash of the transaction that triggered the event"
+  transactionID: Bytes!
+  "The account that owns the domain after the transfer"
+  owner: Account!
+}
+
+type NewOwner implements DomainEvent @entity {
+  "The unique identifier of the event"
+  id: ID!
+  "The parent domain of the domain name associated with the event"
+  parentDomain: Domain!
+  "The domain name associated with the event"
+  domain: Domain!
+  "The block number at which the event occurred"
+  blockNumber: Int!
+  "The transaction hash of the transaction that triggered the event"
+  transactionID: Bytes!
+  "The new account that owns the domain"
+  owner: Account!
+}
+
+type NewTTL implements DomainEvent @entity {
+  "The unique identifier of the event"
+  id: ID!
+  "The domain name associated with the event"
+  domain: Domain!
+  "The block number at which the event occurred"
+  blockNumber: Int!
+  "The transaction hash of the transaction that triggered the event"
+  transactionID: Bytes!
+  "The new TTL value (in seconds) associated with the domain"
+  ttl: BigInt!
+}

@@ -1,0 +1,35 @@
+specVersion: 1.0.0
+indexerHints:
+  prune: auto
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: RNS
+    network: rootstock
+    source:
+      address: "0xcb868aeabd31e2b66f74e9a55cf064abb31a4ad5"
+      abi: RNS
+      startBlock: 905027
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - NewOwner
+        - Transfer
+        - NewResolver
+        - NewTTL
+      abis:
+        - name: RNS
+          file: ./abis/RNS.json
+      eventHandlers:
+        - event: NewOwner(indexed bytes32,indexed bytes32,address)
+          handler: handleNewOwner
+        - event: Transfer(indexed bytes32,address)
+          handler: handleTransfer
+        - event: NewResolver(indexed bytes32,address)
+          handler: handleNewResolver
+        - event: NewTTL(indexed bytes32,uint64)
+          handler: handleNewTTL
+      file: ./src/rns.ts
