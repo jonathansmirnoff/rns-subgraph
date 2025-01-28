@@ -33,3 +33,26 @@ dataSources:
         - event: NewTTL(indexed bytes32,uint64)
           handler: handleNewTTL
       file: ./src/rns.ts
+  - kind: ethereum
+    name: RSKOwner
+    network: rootstock
+    source:
+      address: "0x45d3e4FB311982A06bA52359d44cb4f5980e0ef1"
+      abi: RSKOwner
+      startBlock: 1891388
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:                
+        - OwnershipTransferred
+        - RSKOwnerTransfer
+      abis:
+        - name: RSKOwner
+          file: ./abis/RSKOwner.json
+      eventHandlers:        
+        - event: ExpirationChanged(uint256,uint256)
+          handler: handleExpirationChanged
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: ./src/rsk-owner.ts

@@ -36,9 +36,13 @@ type Domain @entity {
   
   "The account that owns the domain"
   owner: Account!
+  "The account that owns the ERC721 NFT for the domain"
+  registrant: Account
   
   "The expiry date for the domain, from either the registration, or the wrapped domain if PCC is burned"
   expiryDate: BigInt
+  "The registration associated with the domain"
+  registration: Registration @derivedFrom(field: "domain")
 }
 
 type Account @entity {
@@ -141,4 +145,75 @@ type NewTTL implements DomainEvent @entity {
   transactionID: Bytes!
   "The new TTL value (in seconds) associated with the domain"
   ttl: BigInt!
+}
+
+type ExpiryExtended implements DomainEvent @entity {
+  "The unique identifier of the event"
+  id: ID!
+  "The domain name associated with the event"
+  domain: Domain!
+  "The block number at which the event occurred"
+  blockNumber: Int!
+  "The transaction hash of the transaction that triggered the event"
+  transactionID: Bytes!
+  "The new expiry date associated with the domain after the extension event"
+  expiryDate: BigInt!
+}
+
+interface RegistrationEvent {
+  "The unique identifier of the registration event"
+  id: ID!
+  "The registration associated with the event"
+  registration: Registration!
+  "The block number of the event"
+  blockNumber: Int!
+  "The transaction ID associated with the event"
+  transactionID: Bytes!
+}
+
+type NameRegistered implements RegistrationEvent @entity {
+  "The unique identifier of the NameRegistered event"
+  id: ID!
+  "The registration associated with the event"
+  registration: Registration!
+  "The block number of the event"
+  blockNumber: Int!
+  "The transaction ID associated with the event"
+  transactionID: Bytes!
+  "The account that registered the name"
+  registrant: Account!
+  "The expiry date of the registration"
+  expiryDate: BigInt!
+}
+
+type Registration @entity {
+  "The unique identifier of the registration"
+  id: ID!
+  "The domain name associated with the registration"
+  domain: Domain!
+  "The registration date of the domain"
+  registrationDate: BigInt!
+  "The expiry date of the domain"
+  expiryDate: BigInt!
+  "The cost associated with the domain registration"
+  cost: BigInt
+  "The account that registered the domain"
+  registrant: Account!
+  "The human-readable label name associated with the domain registration"
+  labelName: String
+  "The events associated with the domain registration"
+  events: [RegistrationEvent!]! @derivedFrom(field: "registration")
+}
+
+type NameTransferred implements RegistrationEvent @entity {
+  "The ID of the event"
+  id: ID!
+  "The registration associated with the event"
+  registration: Registration!
+  "The block number of the event"
+  blockNumber: Int!
+  "The transaction ID of the event"
+  transactionID: Bytes!
+  "The new owner of the domain"
+  newOwner: Account!
 }
