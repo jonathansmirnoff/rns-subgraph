@@ -44,15 +44,56 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
-      entities:                
+      entities:
         - OwnershipTransferred
         - RSKOwnerTransfer
       abis:
         - name: RSKOwner
           file: ./abis/RSKOwner.json
-      eventHandlers:        
+      eventHandlers:
         - event: ExpirationChanged(uint256,uint256)
           handler: handleExpirationChanged
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
       file: ./src/rsk-owner.ts
+  - kind: ethereum
+    name: ResolverV1
+    network: rootstock
+    source:
+      address: "0xd87f8121d44f3717d4badc50b24e50044f86d64b"
+      abi: ResolverV1
+      startBlock: 2406884
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - ABIChanged
+        - AddrChanged
+        - MulticoinAddrChanged
+        - AuthorisationChanged
+        - ContenthashChanged
+        - InterfaceChanged
+        - PubkeyChanged
+        - TextChanged
+      abis:
+        - name: ResolverV1
+          file: ./abis/ResolverV1.json
+      eventHandlers:
+        - event: ABIChanged(indexed bytes32,indexed uint256)
+          handler: handleABIChanged
+        - event: AddrChanged(indexed bytes32,address)
+          handler: handleAddrChanged
+        - event: AddressChanged(indexed bytes32,uint256,bytes)
+          handler: handleAddressChanged
+        - event: AuthorisationChanged(indexed bytes32,indexed address,indexed address,bool)
+          handler: handleAuthorisationChanged
+        - event: ContenthashChanged(indexed bytes32,bytes)
+          handler: handleContenthashChanged
+        - event: InterfaceChanged(indexed bytes32,indexed bytes4,address)
+          handler: handleInterfaceChanged
+        - event: PubkeyChanged(indexed bytes32,bytes32,bytes32)
+          handler: handlePubkeyChanged
+        - event: TextChanged(indexed bytes32,indexed string,string)
+          handler: handleTextChanged
+      file: ./src/resolver-v-1.ts

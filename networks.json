@@ -9,6 +9,9 @@
     },
     "RSKOwner": {
       "address": "0x45d3e4FB311982A06bA52359d44cb4f5980e0ef1"
+    },
+    "ResolverV1": {
+      "address": "0x2d6eeddde13832512c68f9ed7ccf44b728a2be70"
     }
   }
 }

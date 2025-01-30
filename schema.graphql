@@ -1,13 +1,3 @@
-type NameChanged @entity(immutable: true) {
-  id: Bytes!
-  node: Bytes! # bytes32
-  name: String! # string
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-  address: Bytes!
-}
-
 type Domain @entity {
   "The namehash of the name"
   id: ID!
@@ -216,4 +206,120 @@ type NameTransferred implements RegistrationEvent @entity {
   transactionID: Bytes!
   "The new owner of the domain"
   newOwner: Account!
+}
+
+type AbiChanged implements ResolverEvent @entity {
+  "Concatenation of block number and log ID"
+  id: ID!
+  "Used to derive relationships to Resolvers"
+  resolver: Resolver!
+  "The block number at which the event was emitted"
+  blockNumber: Int!
+  "The transaction hash of the transaction in which the event was emitted"
+  transactionID: Bytes!
+  "The content type of the ABI change"
+  contentType: BigInt!
+}
+
+type AddrChanged implements ResolverEvent @entity {
+  "Unique identifier for this event"
+  id: ID!
+  "The resolver associated with this event"
+  resolver: Resolver!
+  "The block number at which this event occurred"
+  blockNumber: Int!
+  "The transaction ID for the transaction in which this event occurred"
+  transactionID: Bytes!
+  "The new address associated with the resolver"
+  addr: Account!
+}
+
+type MulticoinAddrChanged implements ResolverEvent @entity {
+  "Unique identifier for the event"
+  id: ID!
+  "Resolver associated with this event"
+  resolver: Resolver!
+  "Block number in which this event was emitted"
+  blockNumber: Int!
+  "Transaction ID in which this event was emitted"
+  transactionID: Bytes!
+  "The coin type of the changed address"
+  coinType: BigInt!
+  "The new address value for the given coin type"
+  addr: Bytes!
+}
+
+type AuthorisationChanged implements ResolverEvent @entity {
+  "Unique identifier for this event"
+  id: ID!
+  "The resolver associated with this event"
+  resolver: Resolver!
+  "The block number at which the event occurred"
+  blockNumber: Int!
+  "The transaction hash associated with the event"
+  transactionID: Bytes!
+  "The owner of the authorisation"
+  owner: Bytes!
+  "The target of the authorisation"
+  target: Bytes!
+  "Whether the authorisation was added or removed"
+  isAuthorized: Boolean!
+}
+
+type ContenthashChanged implements ResolverEvent @entity {
+  "Concatenation of block number and log ID"
+  id: ID!
+  "Used to derive relationships to Resolvers"
+  resolver: Resolver!
+  "The block number where the event occurred"
+  blockNumber: Int!
+  "The ID of the transaction where the event occurred"
+  transactionID: Bytes!
+  "The new content hash for the domain"
+  hash: Bytes!
+}
+
+type InterfaceChanged implements ResolverEvent @entity {
+  "Concatenation of block number and log ID"
+  id: ID!
+  "Used to derive relationships to Resolvers"
+  resolver: Resolver!
+  "The block number in which the event occurred"
+  blockNumber: Int!
+  "The transaction ID for the transaction in which the event occurred"
+  transactionID: Bytes!
+  "The ID of the EIP-1820 interface that was changed"
+  interfaceID: Bytes!
+  "The address of the contract that implements the interface"
+  implementer: Bytes!
+}
+
+type PubkeyChanged implements ResolverEvent @entity {
+  "Concatenation of block number and log ID"
+  id: ID!
+  "Used to derive relationships to Resolvers"
+  resolver: Resolver!
+  "Block number of the Ethereum block where the event occurred"
+  blockNumber: Int!
+  "Transaction hash of the Ethereum transaction where the event occurred"
+  transactionID: Bytes!
+  "The x-coordinate of the new public key"
+  x: Bytes!
+  "The y-coordinate of the new public key"
+  y: Bytes!
+}
+
+type TextChanged implements ResolverEvent @entity {
+  "Concatenation of block number and log ID"
+  id: ID!
+  "Used to derive relationships to Resolvers"
+  resolver: Resolver!
+  "Block number of the Ethereum block in which the event occurred"
+  blockNumber: Int!
+  "Hash of the Ethereum transaction in which the event occurred"
+  transactionID: Bytes!
+  "The key of the text record that was changed"
+  key: String!
+  "The new value of the text record that was changed"
+  value: String
 }
