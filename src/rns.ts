@@ -4,8 +4,8 @@ import {
   Transfer as TransferEvent,
   NewResolver as NewResolverEvent,
   NewTTL as NewTTLEvent,
-} from "../generated/RNS/RNS"
-import { NewOwner, Transfer, NewResolver, NewTTL, Domain, Account, Resolver } from "../generated/schema"
+} from "./types/RNS/RNS"
+import { NewOwner, Transfer, NewResolver, NewTTL, Domain, Account, Resolver } from "./types/schema"
 import { BIG_INT_ZERO, checkValidLabel, createEventID, EMPTY_ADDRESS, EMPTY_ADDRESS_BYTEARRAY, ROOT_NODE } from "./utils";
 
 function recurseDomainDelete(domain: Domain): string | null {

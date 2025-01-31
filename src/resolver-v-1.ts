@@ -8,7 +8,7 @@ import {
   InterfaceChanged as InterfaceChangedEvent,
   PubkeyChanged as PubkeyChangedEvent,
   TextChanged as TextChangedEvent,
-} from "../generated/ResolverV1/ResolverV1"
+} from "./types/ResolverV1/ResolverV1"
 import {
   AbiChanged,  
   Account,
@@ -21,7 +21,7 @@ import {
   PubkeyChanged,  
   Resolver,
   TextChanged,
-} from "../generated/schema"
+} from "./types/schema"
 import { createEventID } from "./utils";
 
 export function handleAddrChanged(event: AddrChangedEvent): void {

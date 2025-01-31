@@ -134,3 +134,5 @@ generated/
 build/
 tests/.bin/
 tests/.docker/
+tests/.latest.json
+src/types

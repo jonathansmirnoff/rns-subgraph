@@ -5,7 +5,7 @@ import {
   ExpirationChanged as ExpirationChangedEvent,
   OwnershipTransferred as OwnershipTransferredEvent,
   Transfer as TransferEvent,
-} from "../generated/RSKOwner/RSKOwner"
+} from "./types/RSKOwner/RSKOwner"
 import {  
   Account,
   Domain,  
@@ -13,7 +13,7 @@ import {
   NameTransferred,  
   Registration,  
   Transfer,
-} from "../generated/schema"
+} from "./types/schema"
 import { checkValidLabel, concat, createEventID, RSK_NODE, uint256ToByteArray } from "./utils";
 
 var rootNode: ByteArray = ByteArray.fromHexString(RSK_NODE);
@@ -43,6 +43,8 @@ export function handleExpirationChanged(event: ExpirationChangedEvent): void {
   }
   domain.save();
   registration.save();
+
+  //log.info("Expiration changed for domain: {}", []);
 
   let registrationEvent = new NameRegistered(createEventID(event));
   registrationEvent.registration = registration.id;
