@@ -51,7 +51,7 @@ Retrieve the list of active domains
 }
 ```
 
-Filter domians per account
+Filter domians by account
 
 ```
 {
@@ -89,11 +89,12 @@ Retrive domain information
 }
 ```
 
-## Genaral considerations
-
+## General considerations
 The subgraph uses a mapping function from label hash to string. It has a dictionary of known values. If a hash is not found in the dictionary, the hash itself is returned. This is why unresolved hashes may appear instead of names.
 When searching by address, it must be in lowercase.
 
+## Tests
+This subgraph uses the Matchstick framework to test mapping logic. In this project, we run Matchstick in a Docker container. For more details on creating unit tests in a subgraph project, refer to [this guide](https://thegraph.com/docs/en/subgraphs/developing/creating/unit-testing-framework/).
 
 ## RNS
 RNS provides an architecture which enables the identification of blockchain addresses by human-readable names.
